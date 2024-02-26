@@ -46,11 +46,20 @@ def print_movie_list(heading, movies):
         print(f"{movie[0]} | Released On: {date_of_release}")
     print("--- \n")
 
+def print_watched_movie_list(watcher_name, movies):
+    print(f"-- {watcher_name}'s watched movies --")
+    for movie in movies:
+        print(f"{movie[1]}")
+    print("---- \n")
+
+    
+
 def prompt_watch_movie():
-    #Choose movie that you watched
+    #Who are you and what was the movie that you watched?
+    watcher_name = input("Please enter your name: ")
     movie_title = input("What movie did you watch? ")
     #mark watched
-    database.watch_movie(movie_title)
+    database.watch_movie(watcher_name, movie_title)
 
 #Menu while loop
 while (user_input := input(menu)) != "6":
@@ -65,7 +74,8 @@ while (user_input := input(menu)) != "6":
     elif user_input == "4":
         prompt_watch_movie()
     elif user_input == "5":
-        movies = database.get_watched_movies()
-        print_movie_list("Watched", movies)
+        watcher_name = input("Please enter your name: ")
+        movies = database.get_watched_movies(watcher_name)
+        print_watched_movie_list(watcher_name, movies)
     else:
         print("Invalid input, please try again!")

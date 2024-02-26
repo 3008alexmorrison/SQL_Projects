@@ -4,19 +4,25 @@ import datetime
 #objects that contain sql queries for functions
 CREATE_MOVIES_TABLE = """ CREATE TABLE IF NOT EXISTS movies (
     title TEXT,
-    release_timestamp REAL,
-    watched INTEGER
+    release_timestamp REAL
 );"""
 
-INSERT_MOVIES = "INSERT INTO movies (title, release_timestamp, watched) VALUES (?, ?, 0);"
+CREATE_WATCHLIST_TABLE = """ CREATE TABLE IF NOT EXISTS watched (
+    watcher_name TEXT,
+    title TEXT
+);"""
+
+INSERT_MOVIES = "INSERT INTO movies (title, release_timestamp) VALUES (?, ?);"
 
 SELECT_ALL_MOVIES = "SELECT * FROM movies;"
 
 SELECT_UPCOMING_MOVIES = "SELECT * FROM movies WHERE release_timestamp > ?;"
 
-SELECT_WATCHED_MOVIES = "SELECT * FROM moveies WHERE watched = 1;"
+SELECT_WATCHED_MOVIES = "SELECT * FROM watched WHERE watcher_name = ?;"
 
-SET_MOVIE_WATCHED = "UPDATE movies SET watched = 1 WHERE title = ?;"
+INSERT_WATCHED_MOVIE = "INSERT INTO watched (watcher_name, title) VALUES (?, ?);"
+
+DELETE_MOVIE = "DELETE FROM movies WHERE title = ?;"
 
 #connect to database
 connection = sqlite3.connect("data.db")
@@ -25,6 +31,7 @@ def create_tables():
     with connection:
         #Create tables if they do not exist in database
         connection.execute(CREATE_MOVIES_TABLE)
+        connection.execute(CREATE_WATCHLIST_TABLE)
 
 def add_movie(title, release_timestamp):
     with connection:
@@ -46,16 +53,15 @@ def get_movies(upcoming=False):
         #return selected movies
         return cursor.fetchall()
 
-def watch_movie(title):
-    with connection:
-        cursor = connection.cursor()
-        #Update movie in database to switch watched 0 to 1
-        cursor.execute(SET_MOVIE_WATCHED, (title,))
+def watch_movie(watcher_name, title):
+        with connection:
+            connection.execute(DELETE_MOVIE, (title,))
+            connection.execute(INSERT_WATCHED_MOVIE, (watcher_name, title))
 
-def get_watched_movies():
+def get_watched_movies(watcher_name):
     with connection:
         cursor = connection.cursor()
         #select all movies with watched = 1
-        cursor.execute(SELECT_WATCHED_MOVIES)
+        cursor.execute(SELECT_WATCHED_MOVIES, (watcher_name,))
         #return selected movies 
         return cursor.fetchall()
