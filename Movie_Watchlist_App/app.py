@@ -47,8 +47,8 @@ def print_movie_list(heading, movies):
         print(f"{_id}: {title} | Released On: {date_of_release}")
     print("--- \n")
 
-def print_watched_movie_list(watcher_name, movies):
-    print(f"-- {watcher_name}'s watched movies --")
+def print_watched_movie_list(username, movies):
+    print(f"-- {username}'s watched movies --")
     for movie in movies:
         print(f"{movie[1]}")
     print("---- \n")
@@ -78,9 +78,9 @@ while (user_input := input(menu)) != "7":
     elif user_input == "4":
         prompt_watch_movie()
     elif user_input == "5":
-        watcher_name = input("Please enter your name: ")
-        movies = database.get_watched_movies(watcher_name)
-        print_watched_movie_list(watcher_name, movies)
+        username = input("Please enter your name: ")
+        movies = database.get_watched_movies(username)
+        print_watched_movie_list(username, movies)
     elif user_input == "6":
         prompt_add_user()
     else:
