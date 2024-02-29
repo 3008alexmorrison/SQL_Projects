@@ -38,6 +38,8 @@ DELETE_MOVIE = "DELETE FROM movies WHERE title = ?;"
 
 SEARCH_MOVIE = "SELECT * FROM movies WHERE title LIKE ?;"
 
+CREATE_RELEASE_INDEX = "CREATE INDEX IF NOT EXISTS idx_movies_release ON movies (release_timestamp);"
+
 #connect to database
 connection = sqlite3.connect("data.db")
 
@@ -47,6 +49,7 @@ def create_tables():
         connection.execute(CREATE_MOVIES_TABLE)
         connection.execute(CREATE_USERS_TABLE)
         connection.execute(CREATE_WATCHED_TABLE)
+        connection.execute(CREATE_RELEASE_INDEX)
 
 def add_user(username):
     with connection:
