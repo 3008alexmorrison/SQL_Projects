@@ -36,6 +36,8 @@ INSERT_WATCHED_MOVIE = "INSERT INTO watched (user_username, movie_id) VALUES (?,
 
 DELETE_MOVIE = "DELETE FROM movies WHERE title = ?;"
 
+SEARCH_MOVIE = "SELECT * FROM movies WHERE title LIKE ?;"
+
 #connect to database
 connection = sqlite3.connect("data.db")
 
@@ -68,6 +70,12 @@ def get_movies(upcoming=False):
             #select all movies from database
             cursor.execute(SELECT_ALL_MOVIES)
         #return selected movies
+        return cursor.fetchall()
+    
+def search_movies(search_term):
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(SEARCH_MOVIE, (f"%{search_term}%",))
         return cursor.fetchall()
 
 def watch_movie(username, movie_id):

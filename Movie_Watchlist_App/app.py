@@ -8,7 +8,8 @@ menu = """Please select one of the following options:
 4) Watch a movie
 5) View watched movies.
 6) Add new user
-7) Exit.
+7) Search movies
+8) Exit.
 
 Your selection: """
 
@@ -67,8 +68,16 @@ def prompt_show_watched_movies():
     else:
         print("This user hasn't watched any movies yet!")
 
+def prompt_search_movies():
+    search_term = input("Enter movie title or partial movie title: ")
+    movies = database.search_movies(search_term)
+    if movies:
+        print_movie_list("Movies Found:", movies)
+    else:
+        print("No movies found for that search term!")
+
 #Menu while loop
-while (user_input := input(menu)) != "7":
+while (user_input := input(menu)) != "8":
     if user_input == "1":
         prompt_add_movie()
     elif user_input == "2":
@@ -83,5 +92,7 @@ while (user_input := input(menu)) != "7":
         prompt_show_watched_movies()
     elif user_input == "6":
         prompt_add_user()
+    elif user_input == "7":
+        prompt_search_movies()
     else:
         print("Invalid input, please try again!")
