@@ -15,38 +15,41 @@ Your selection: """
 
 welcome = "Welcome to the watchlist app!"
 
-
 print(welcome)
 database.create_tables()
 
-#functions for menu options
+
+# functions for menu options
 def prompt_add_movie():
-    #prompt for title and release date
+    # prompt for title and release date
     title = input("Movie title: ")
     release_date = input("Release date (dd-mm-YYYY): ")
-    #parse release date into timestamp for later use
+    # parse release date into timestamp for later use
     parsed_date = datetime.datetime.strptime(release_date, "%d-%m-%Y")
     timestamp = parsed_date.timestamp()
-    #add movie to database
+    # add movie to database
     database.add_movie(title, timestamp)
 
+
 def timestamp_to_date(timestamp):
-    #unparse timestamp into default format date
+    # unparse timestamp into default format date
     date = datetime.datetime.fromtimestamp(timestamp)
-    #format date into more readable format and convert to string
+    # format date into more readable format and convert to string
     formatted_date = date.strftime("%B %d, %Y")
     return formatted_date
 
+
 def print_movie_list(heading, movies):
-    #header
+    # header
     print(f"-- {heading} Movies --")
-    #iterate through database to get specified movies
+    # iterate through database to get specified movies
     for _id, title, release_date in movies:
-        #format timestamp to readable date
+        # format timestamp to readable date
         date_of_release = timestamp_to_date(release_date)
-        #print movie list
+        # print movie list
         print(f"{_id}: {title} | Released On: {date_of_release}")
     print("--- \n")
+
 
 def prompt_add_user():
     username = input("Username: ")
@@ -54,11 +57,12 @@ def prompt_add_user():
 
 
 def prompt_watch_movie():
-    #Who are you and what was the movie that you watched?
+    # Who are you and what was the movie that you watched?
     username = input("Please enter your username: ")
     movie_id = input("Movie ID: ")
-    #mark watched
+    # mark watched
     database.watch_movie(username, movie_id)
+
 
 def prompt_show_watched_movies():
     username = input("Please enter your username: ")
@@ -68,6 +72,7 @@ def prompt_show_watched_movies():
     else:
         print("This user hasn't watched any movies yet!")
 
+
 def prompt_search_movies():
     search_term = input("Enter movie title or partial movie title: ")
     movies = database.search_movies(search_term)
@@ -76,7 +81,8 @@ def prompt_search_movies():
     else:
         print("No movies found for that search term!")
 
-#Menu while loop
+
+# Menu while loop
 while (user_input := input(menu)) != "8":
     if user_input == "1":
         prompt_add_movie()
